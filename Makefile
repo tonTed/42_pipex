@@ -6,7 +6,7 @@
 #    By: tonted <tonted@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 00:37:48 by tonted            #+#    #+#              #
-#    Updated: 2022/01/21 00:45:00 by tonted           ###   ########.fr        #
+#    Updated: 2022/03/09 07:19:00 by tonted           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ NAME = pipex
 VERBOSE = TRUE
 
 # TODO add to rules .o.c
-ENTRYPOINT = src/pipex.c
+# ENTRYPOINT = src/pipex.c
 
 # Unit Test management
 UTEST = .test/_test_main.c
@@ -37,15 +37,15 @@ OBJDIRS = $(foreach dir, $(DIRS), $(addprefix $(OBJDIR)/, $(dir)))
 # Create a list of *.c sources in DIRS
 SRCS = $(wildcard src/*.c)
 SRCS += $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))
-SRCS := $(filter-out $(ENTRYPOINT), $(SRCS))
+# SRCS := $(filter-out $(ENTRYPOINT), $(SRCS))
 
 # Define objects for all sources
 OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
 # Name the compiler & flags
 CC = clang
-CFLAGS = -Wall -Wextra -Werror -g
-CFLAGS += -iquote$(INCDIR)
+# CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -iquote$(INCDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(HIDE)$(CC) $(CFLAGS) -c  $< -o $@
@@ -54,7 +54,7 @@ all			: buildrepo $(NAME)
 
 $(NAME)		: $(OBJS)
 	$(HIDE)$(MAKE) -C $(LIBFTDIR)
-	$(HIDE)$(CC) $(CFLAGS) $(ENTRYPOINT) $(OBJS) -L./libft -lft -o $(NAME)
+	$(HIDE)$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -o $(NAME)
 	@printf $(GREEN)"[$@] program created\n"$(RESET)
 
 clean		:

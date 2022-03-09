@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/01/21 01:34:23 by tonted           ###   ########.fr       */
+/*   Updated: 2022/03/09 10:32:17 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,14 @@
 */
 
 #include "pipex.h"
+#include <string.h>
+#include <errno.h>
 
 #define PATH "PATH="
 #define LEN_PATH 5
 #define SEP_PATH ':'
 
-char	**path_bin(char **envp)
+char	**get_path_bin(char **envp)
 {
 	while (*envp)
 	{
@@ -75,20 +77,46 @@ char	**path_bin(char **envp)
 	return (NULL);
 }
 
+char	*get_path_exec(char **path_bin, char *cmd)
+{
+	u_int32_t	i;
+	char		*cmd_path;
+	char		*tmp;
+
+	i = 0;
+	while (path_bin[i])
+	{
+		tmp = ft_strjoin(path_bin[i], "/");
+		cmd_path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!access(cmd_path, F_OK))
+			return (cmd_path);
+		i++;
+	}
+	return (NULL);
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
-	char	**path;
+	char	**path_bin;
+	char	*path_exec;
+	char	*args_exec[] = {"ls", "-l", NULL};
+	char	**env_exec = {NULL};
 
 	// TODO message for minimum 4 args
 	(void)argc;
 	// if (argc < 5)
 	// 	return (EXIT_FAILURE);
-	path = path_bin(envp);
-	ft_puttabstr_fd(path, 1);
-	ft_puttabstr_fd(&argv[1], 1);
+	path_bin = get_path_bin(envp);
+	path_exec = get_path_exec(path_bin, "ls");
+	printf("%s\n", path_exec);
+	if (!path_exec)
+		printf(">>>>> %s\n", strerror(errno));
+	else
+		execve(path_exec, args_exec, env_exec);
 
 	
 	// TODO free
-	free(path);
+	free(path_bin);
 	return (0);
 }
