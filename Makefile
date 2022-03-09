@@ -6,7 +6,7 @@
 #    By: tonted <tonted@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 00:37:48 by tonted            #+#    #+#              #
-#    Updated: 2022/03/09 07:19:00 by tonted           ###   ########.fr        #
+#    Updated: 2022/03/09 15:24:11 by tonted           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,7 @@ print	:
 	@echo $(SRCS)
 
 test	: all
-	./pipex file1 ls -l wc -l cmd2 file2
+	./pipex file1 "ls -l" "wc -l" file2
 	
 
 .PHONY		: clean fclean all re $(OBJDIR) buildrepo print

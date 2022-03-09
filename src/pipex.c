@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/03/09 10:32:17 by tonted           ###   ########.fr       */
+/*   Updated: 2022/03/09 15:23:21 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,6 @@
 */
 
 #include "pipex.h"
-#include <string.h>
-#include <errno.h>
-
-#define PATH "PATH="
-#define LEN_PATH 5
-#define SEP_PATH ':'
 
 char	**get_path_bin(char **envp)
 {
@@ -107,6 +101,8 @@ int main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	// if (argc < 5)
 	// 	return (EXIT_FAILURE);
+	if (parsing(argc, argv))
+		return (EXIT_FAILURE);
 	path_bin = get_path_bin(envp);
 	path_exec = get_path_exec(path_bin, "ls");
 	printf("%s\n", path_exec);
