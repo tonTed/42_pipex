@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.h                                           :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/09 15:25:11 by tonted            #+#    #+#             */
-/*   Updated: 2022/03/09 16:38:33 by tonted           ###   ########.fr       */
+/*   Created: 2022/03/09 15:56:12 by tonted            #+#    #+#             */
+/*   Updated: 2022/03/09 16:02:39 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERRORS_H
-# define ERRORS_H
+#include "pipex.h"
 
-# include "../libft/include/libft.h"
+void	free_end(t_pipex *vars)
+{
+	while (vars->amount_cmd--)
+		free(vars->cmds->cmd);
+	free(vars->cmds);
+}
 
-# define ERR_MESS "Error.\n"
-# define ERR_ARGS "Numbers of arguments must be greater than 3.\n"
+void	free_tab_str(char **tabstr)
+{
+	u_int32_t	i;
 
-int	err(void);
-int	err_message(char *s);
-int	err_args(void);
-
-#endif
+	i = 0;
+	while (tabstr[i])
+		free(tabstr[i++]);
+	free(tabstr);
+}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   errors_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:26:12 by tonted            #+#    #+#             */
-/*   Updated: 2022/03/09 15:28:31 by tonted           ###   ########.fr       */
+/*   Updated: 2022/03/10 15:36:42 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,12 @@
 int	err(void)
 {
 	ft_putstr_fd(BRED ERR_MESS RESET, STDERR_FILENO);
+	return (EXIT_FAILURE);
+}
+
+int	err_message(char *s)
+{
+	err();
+	ft_putendl_fd(s, STDERR_FILENO);
 	return (EXIT_FAILURE);
 }

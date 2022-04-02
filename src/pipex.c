@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/03/09 15:23:21 by tonted           ###   ########.fr       */
+/*   Updated: 2022/03/13 12:56:42 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,34 +85,90 @@ char	*get_path_exec(char **path_bin, char *cmd)
 		free(tmp);
 		if (!access(cmd_path, F_OK))
 			return (cmd_path);
+		free(cmd_path);
 		i++;
 	}
 	return (NULL);
 }
 
+int	try(int argc, char **argv)
+{
+	printf(BBLU "--- TRY ZONE ---\n" RESET);
+	int	fd[2];
+
+	if (pipe(fd))
+		return (EXIT_FAILURE);
+	printf(RED "fd[0]: %d - fd[1]: %d\n" RESET, fd[0], fd[1]);
+	pid_t	id = fork();
+	if (id < 0)
+		return (EXIT_FAILURE);
+
+	/*
+		fd[0] : read
+		fd[1] : write
+	*/
+	if (id == 0)	// child process
+	{
+		printf(CYN "Child process -> id: %d\n" RESET, id);
+		char	str[100];
+
+		close(fd[1]);
+		read(fd[0], str, 100);
+		printf("children > %s\n", str);
+		close(fd[0]);
+	}
+	else			// parent process
+	{
+		printf(YEL "Parent process -> id: %d\n" RESET, id);
+		close(fd[0]);
+		write(fd[1], "Parent: Hello 42", strlen("Parent: Hello 42"));
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	exec_cmd(char **path_cmd, char args_cmd)
+{
+	return (EXIT_SUCCESS);
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
-	char	**path_bin;
-	char	*path_exec;
-	char	*args_exec[] = {"ls", "-l", NULL};
-	char	**env_exec = {NULL};
-
-	// TODO message for minimum 4 args
-	(void)argc;
-	// if (argc < 5)
+	t_pipex	vars;
+	
+	// if (parsing(argc, argv, envp, &vars))
 	// 	return (EXIT_FAILURE);
-	if (parsing(argc, argv))
-		return (EXIT_FAILURE);
-	path_bin = get_path_bin(envp);
-	path_exec = get_path_exec(path_bin, "ls");
-	printf("%s\n", path_exec);
-	if (!path_exec)
-		printf(">>>>> %s\n", strerror(errno));
-	else
-		execve(path_exec, args_exec, env_exec);
+	vars.path_bin = get_path_bin(envp);
+
+	char	*path_exec;
+
+	int	fd_out = open(argv[i_file_out(argc)], O_CREAT | O_WRONLY);
 
 	
+	
+	int fd[2];
+	pipe(fd);
+	if (pipe(fd))
+		return (EXIT_FAILURE);
+
+	pid_t id = fork();
+	if (id == 0)
+	{
+		char	*args_exec[] = {argv[2], argv[1], NULL};
+		path_exec = get_path_exec(vars.path_bin, argv[2]);
+		if (!path_exec)
+			printf(">>>>> %s\n", strerror(errno));
+		else
+			execve(path_exec, args_exec, NULL);
+	}
+	// first exec
+
+	// second exec
+
+	// }
 	// TODO free
-	free(path_bin);
+	// free(path_bin);
+	
+
+	// free_end(&vars);
 	return (0);
 }
