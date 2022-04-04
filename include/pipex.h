@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 00:45:05 by tonted            #+#    #+#             */
-/*   Updated: 2022/03/13 12:54:54 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/02 10:28:50 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,15 @@
 # define PATH "PATH="
 # define LEN_PATH 5
 # define SEP_PATH ':'
+# define DEBUG 1
 
 typedef struct s_pipex
 {
 	char	**path_bin;
-	// char		**cmds;
+	int		fd_in;
+	int		fd_out;
+	int		cmds;
+	int		*fd_array;
 }			t_pipex;
 
 // PARSING
@@ -36,6 +40,7 @@ int	parsing(int argc, char **argv, char **envp, t_pipex *vars);
 
 // GETTERS
 int	i_file_out(int argc);
+int	i_file_in();
 
 // FREE
 void	free_end(t_pipex *vars);

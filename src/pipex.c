@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/03/13 12:56:42 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:42:35 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ char	*get_path_exec(char **path_bin, char *cmd)
 	char		*cmd_path;
 	char		*tmp;
 
+	if (ft_ischarinstr('/', cmd))
+		return(cmd);	
 	i = 0;
 	while (path_bin[i])
 	{
@@ -88,87 +90,96 @@ char	*get_path_exec(char **path_bin, char *cmd)
 		free(cmd_path);
 		i++;
 	}
-	return (NULL);
+	return (ft_strdup("wtf"));
 }
 
-int	try(int argc, char **argv)
-{
-	printf(BBLU "--- TRY ZONE ---\n" RESET);
-	int	fd[2];
+int	set_fd_array(t_pipex *vars, int cmds){
 
-	if (pipe(fd))
-		return (EXIT_FAILURE);
-	printf(RED "fd[0]: %d - fd[1]: %d\n" RESET, fd[0], fd[1]);
-	pid_t	id = fork();
-	if (id < 0)
-		return (EXIT_FAILURE);
+	int	i;
+	int fds[2];
 
-	/*
-		fd[0] : read
-		fd[1] : write
-	*/
-	if (id == 0)	// child process
+	vars->fd_array = (int *)malloc(sizeof(int) * (vars->cmds) * 2);
+	i = 1;
+	while (--cmds)
 	{
-		printf(CYN "Child process -> id: %d\n" RESET, id);
-		char	str[100];
-
-		close(fd[1]);
-		read(fd[0], str, 100);
-		printf("children > %s\n", str);
-		close(fd[0]);
+		pipe(fds);
+		vars->fd_array[i++] = fds[1];
+		vars->fd_array[i++] = fds[0];
 	}
-	else			// parent process
-	{
-		printf(YEL "Parent process -> id: %d\n" RESET, id);
-		close(fd[0]);
-		write(fd[1], "Parent: Hello 42", strlen("Parent: Hello 42"));
-	}
-	return (EXIT_SUCCESS);
+	return(i);
 }
 
-int	exec_cmd(char **path_cmd, char args_cmd)
+int count_cmds(int argc)
 {
-	return (EXIT_SUCCESS);
+	return (argc - 3);
 }
 
-int main(int argc, char *argv[], char *envp[])
+void	exit_mess(int err_no)
+{
+	perror(strerror(err_no));
+	exit(err_no);
+}
+
+void	init(t_pipex *vars, int argc, char **argv, char **envp)
+{
+	int last_index;
+
+	vars->cmds = count_cmds(argc);
+	last_index = set_fd_array(vars, vars->cmds);
+	if (vars->fd_array[5] == -1)
+		exit_mess(errno);
+	vars->path_bin = get_path_bin(envp);
+	vars->fd_array[0] = open(argv[i_file_in()], O_RDONLY);
+	vars->fd_array[last_index] = open(argv[i_file_out(argc)], O_CREAT | O_WRONLY);
+}
+
+int	read_in(int fds[2])
+{
+	return (fds[0]);
+}
+
+int	write_out(int fds[2])
+{
+	return (fds[1]);
+}
+
+int main(int argc, char **argv, char **envp)
 {
 	t_pipex	vars;
-	
-	// if (parsing(argc, argv, envp, &vars))
-	// 	return (EXIT_FAILURE);
-	vars.path_bin = get_path_bin(envp);
-
+	pid_t 	id;
+	int i = 0;
 	char	*path_exec;
+	int fd_in;
+	int fd_out;
 
-	int	fd_out = open(argv[i_file_out(argc)], O_CREAT | O_WRONLY);
+	init(&vars, argc, argv, envp);
+	i = 0;
+	while (i < vars.cmds)
+	{		
+		id = fork();
+		fd_in = read_in(&vars.fd_array[i * 2]);
+		fd_out =  write_out(&vars.fd_array[i * 2]);
+		
+		if (id == 0)
+		{
+			
+			char	*args_exec[] = {argv[i + 2], NULL}; 
 
-	
-	
-	int fd[2];
-	pipe(fd);
-	if (pipe(fd))
-		return (EXIT_FAILURE);
-
-	pid_t id = fork();
-	if (id == 0)
-	{
-		char	*args_exec[] = {argv[2], argv[1], NULL};
-		path_exec = get_path_exec(vars.path_bin, argv[2]);
-		if (!path_exec)
-			printf(">>>>> %s\n", strerror(errno));
+			path_exec = get_path_exec(vars.path_bin, argv[i + 2]);
+			dup2(fd_in, STDIN_FILENO);
+			dup2(fd_out, STDOUT_FILENO);
+			execve(path_exec, args_exec, envp);
+			perror(strerror(errno));
+			exit(1);
+		}
 		else
-			execve(path_exec, args_exec, NULL);
+		{
+			close(fd_out);
+			close(fd_in);
+		}
+		i++;
 	}
-	// first exec
-
-	// second exec
-
-	// }
-	// TODO free
-	// free(path_bin);
-	
-
-	// free_end(&vars);
+	waitpid(id, NULL, 0);
+	ft_puttabint_fd(vars.fd_array, 6, 1);
 	return (0);
 }
