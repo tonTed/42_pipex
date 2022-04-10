@@ -1,37 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors_utils.c                                     :+:      :+:    :+:   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/09 15:26:12 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/09 20:13:42 by tonted           ###   ########.fr       */
+/*   Created: 2022/04/10 08:11:01 by tonted            #+#    #+#             */
+/*   Updated: 2022/04/10 08:33:38 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "errors.h"
+#include "pipex.h"
 
-int	err(void)
+void	is_here_doc(char *s, t_pipex *vars)
 {
-	ft_putstr_fd(BRED ERR_MESS RESET, STDERR_FILENO);
-	return (EXIT_FAILURE);
-}
-
-int	err_message(char *s)
-{
-	err();
-	ft_putendl_fd(s, STDERR_FILENO);
-	return (EXIT_FAILURE);
-}
-
-void	exit_mess(char *message)
-{
-	exit(err_message(message));
-}
-
-void	exit_errno(int err_no)
-{
-	perror(strerror(err_no));
-	exit(err_no);
+	if (!(!ft_strncmp(s, HERE_DOC, LEN_HERE_DOC) && strlen(s) == LEN_HERE_DOC))
+		vars->here_doc = false;
+	vars->here_doc = true;
 }

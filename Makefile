@@ -6,7 +6,7 @@
 #    By: tonted <tonted@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 00:37:48 by tonted            #+#    #+#              #
-#    Updated: 2022/04/04 15:08:56 by tonted           ###   ########.fr        #
+#    Updated: 2022/04/07 21:44:31 by tonted           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,7 +80,7 @@ leak =
 
 test	: all
 # $(leak) ./pipex file1 "ls -l" "wc -l" file2
-	$(leak) ./pipex file1 "cat" "cat" "wc" file2
+	$(leak) ./pipex file1 "ls" "cat" "wc -l" file2
 	
 
 .PHONY		: clean fclean all re $(OBJDIR) buildrepo print

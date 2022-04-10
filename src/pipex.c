@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/04 15:42:35 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/10 08:34:56 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,127 +59,61 @@
 */
 
 #include "pipex.h"
+#include "errors.h"
 
-char	**get_path_bin(char **envp)
+void	open_output(t_pipex *vars, int argc, char **argv)
 {
-	while (*envp)
+	vars->fd_array[i_fd_out(argc)] = open(argv[i_fd_out(argc)], O_CREAT | O_WRONLY);
+	if (vars->fd_array[i_fd_out(argc)] == -1)
 	{
-		if (!(ft_strncmp(PATH, *envp, LEN_PATH)))
-			return(ft_split(&(*envp)[LEN_PATH], SEP_PATH));
-		envp++;
+		free_init(vars);
+		exit_errno(errno);
 	}
-	return (NULL);
 }
 
-char	*get_path_exec(char **path_bin, char *cmd)
+bool	last_cmd(int i, int cmd)
 {
-	u_int32_t	i;
-	char		*cmd_path;
-	char		*tmp;
+	return (i + 1 == cmd);
+}
 
-	if (ft_ischarinstr('/', cmd))
-		return(cmd);	
+pid_t	fork_execute(t_pipex vars, char **argv, int argc)
+{
+	pid_t 	id;
+	int		i;
+
 	i = 0;
-	while (path_bin[i])
-	{
-		tmp = ft_strjoin(path_bin[i], "/");
-		cmd_path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!access(cmd_path, F_OK))
-			return (cmd_path);
-		free(cmd_path);
+	while (i < vars.cmds)
+	{		
+		if(last_cmd(i, vars.cmds))
+			open_output(&vars, argc, argv); 
+		id = fork();
+		if (id == 0)
+		{	
+			dup2(fd_read_end(&vars.fd_array[i * 2]), STDIN_FILENO);
+			dup2(fd_write_end(&vars.fd_array[i * 2]), STDOUT_FILENO);
+			execve(get_path_exec(vars.path_bin, argv[i + 2]),
+				ft_split(argv[i + 2], ' '), NULL);
+			perror(strerror(errno));
+			exit(1);
+		}
+		else
+			close(fd_write_end(&vars.fd_array[i * 2]));
 		i++;
 	}
-	return (ft_strdup("wtf"));
-}
-
-int	set_fd_array(t_pipex *vars, int cmds){
-
-	int	i;
-	int fds[2];
-
-	vars->fd_array = (int *)malloc(sizeof(int) * (vars->cmds) * 2);
-	i = 1;
-	while (--cmds)
-	{
-		pipe(fds);
-		vars->fd_array[i++] = fds[1];
-		vars->fd_array[i++] = fds[0];
-	}
-	return(i);
-}
-
-int count_cmds(int argc)
-{
-	return (argc - 3);
-}
-
-void	exit_mess(int err_no)
-{
-	perror(strerror(err_no));
-	exit(err_no);
-}
-
-void	init(t_pipex *vars, int argc, char **argv, char **envp)
-{
-	int last_index;
-
-	vars->cmds = count_cmds(argc);
-	last_index = set_fd_array(vars, vars->cmds);
-	if (vars->fd_array[5] == -1)
-		exit_mess(errno);
-	vars->path_bin = get_path_bin(envp);
-	vars->fd_array[0] = open(argv[i_file_in()], O_RDONLY);
-	vars->fd_array[last_index] = open(argv[i_file_out(argc)], O_CREAT | O_WRONLY);
-}
-
-int	read_in(int fds[2])
-{
-	return (fds[0]);
-}
-
-int	write_out(int fds[2])
-{
-	return (fds[1]);
+	return (id);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	t_pipex	vars;
-	pid_t 	id;
 	int i = 0;
-	char	*path_exec;
-	int fd_in;
-	int fd_out;
 
+	if (argc < 5)
+		exit_mess(ERR_ARGS_LESS);
+	// if (is_here_doc(argv[1]))
+	// 	here_doc();
 	init(&vars, argc, argv, envp);
-	i = 0;
-	while (i < vars.cmds)
-	{		
-		id = fork();
-		fd_in = read_in(&vars.fd_array[i * 2]);
-		fd_out =  write_out(&vars.fd_array[i * 2]);
-		
-		if (id == 0)
-		{
-			
-			char	*args_exec[] = {argv[i + 2], NULL}; 
-
-			path_exec = get_path_exec(vars.path_bin, argv[i + 2]);
-			dup2(fd_in, STDIN_FILENO);
-			dup2(fd_out, STDOUT_FILENO);
-			execve(path_exec, args_exec, envp);
-			perror(strerror(errno));
-			exit(1);
-		}
-		else
-		{
-			close(fd_out);
-			close(fd_in);
-		}
-		i++;
-	}
-	waitpid(id, NULL, 0);
-	ft_puttabint_fd(vars.fd_array, 6, 1);
+	waitpid(fork_execute(vars, argv, argc), NULL, 0);
+	free_init(&vars);
 	return (0);
 }
