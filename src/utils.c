@@ -6,20 +6,20 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 19:44:25 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/09 19:51:33 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/10 19:03:28 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	fd_read_end(int fds[2])
+int	fd_read_end(t_pipex vars)
 {
-	return (fds[0]);
+	return (vars.fd_array[vars.index_forks * 2]);
 }
 
-int	fd_write_end(int fds[2])
+int	fd_write_end(t_pipex vars)
 {
-	return (fds[1]);
+	return (vars.fd_array[vars.index_forks * 2 + 1]);
 }
 
 char	*get_path_exec(char **path_bin, char *cmd)
@@ -29,7 +29,7 @@ char	*get_path_exec(char **path_bin, char *cmd)
 	char		*tmp;
 
 	if (ft_ischarinstr('/', cmd))
-		return(cmd);	
+		return (cmd);
 	i = 0;
 	while (path_bin[i])
 	{
@@ -49,7 +49,7 @@ char	**get_path_bin(char **envp)
 	while (*envp)
 	{
 		if (!(ft_strncmp(PATH, *envp, LEN_PATH)))
-			return(ft_split(&(*envp)[LEN_PATH], SEP_PATH));
+			return (ft_split(&(*envp)[LEN_PATH], SEP_PATH));
 		envp++;
 	}
 	return (NULL);

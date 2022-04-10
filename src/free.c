@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:56:12 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/09 20:24:57 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/10 19:34:45 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,5 @@ void	free_tab_str(char **tabstr)
 void	free_init(t_pipex *vars)
 {
 	free_tab_str(vars->path_bin);
-	
+	free(vars->fd_array);
 }

@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 00:45:05 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/10 08:35:25 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/10 18:41:52 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,17 @@ typedef struct s_pipex
 	int		cmds;
 	int		*fd_array;
 	bool	here_doc;
+	int		index_forks;
 }			t_pipex;
 
-// 
+// struct t_pipex initialization
 void	init(t_pipex *vars, int argc, char **argv, char **envp);
 
 // returns the read end of the pipe
-int	fd_read_end(int fds[2]);
+int		fd_read_end(t_pipex vars);
 
 // returns the write end of the pipe
-int	fd_write_end(int fds[2]);
+int		fd_write_end(t_pipex vars);
 
 // returns the absolute path of the cmd to execute if exists,
 // otherwise returns `cmd`.
@@ -59,12 +60,11 @@ void	free_init(t_pipex *vars);
 // returns the index of the output file in args.
 int		i_fd_out(int argc);
 
-//
-void	is_here_doc(char *s, t_pipex *vars);
+// HEREDOC
+int		set_here_doc(char *s, t_pipex *vars, int argc);
+void	here_doc(t_pipex *vars, char *limiter);
 
-
-# include <stdio.h>
+// get next line
+char	*get_next_line(int fd);
 
 #endif
-
-// [-0, =1, 2, 3, =4]

@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:25:11 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/09 20:34:14 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/10 18:29:32 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # define ERR_MESS "Error.\n"
 # define ERR_PATHBIN "PATH environment variable does not exist"
-# define ERR_ARGS_LESS "The amount of arguments must be greater than 4"
+# define ERR_ARGS_LESS "The amount of commands must be greater than 2"
 
 int		err(void);
 int		err_message(char *s);

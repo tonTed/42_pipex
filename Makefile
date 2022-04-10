@@ -6,7 +6,7 @@
 #    By: tonted <tonted@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 00:37:48 by tonted            #+#    #+#              #
-#    Updated: 2022/04/07 21:44:31 by tonted           ###   ########.fr        #
+#    Updated: 2022/04/10 19:33:52 by tonted           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,8 +44,8 @@ OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
 # Name the compiler & flags
 CC = clang
-# CFLAGS = -Wall -Wextra -Werror -g
-CFLAGS = -iquote$(INCDIR)
+CFLAGS = -Wall -Wextra -Werror
+CFLAGS += -iquote$(INCDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(HIDE)$(CC) $(CFLAGS) -c  $< -o $@
@@ -76,11 +76,15 @@ print	:
 	@echo $(SRCS)
 
 leak = -leaks --atExit --
-leak = 
+# leak = 
 
 test	: all
 # $(leak) ./pipex file1 "ls -l" "wc -l" file2
 	$(leak) ./pipex file1 "ls" "cat" "wc -l" file2
+
+testh	: all
+# $(leak) ./pipex file1 "ls -l" "wc -l" file2
+	$(leak) ./pipex here_doc "EOF" cat wc file2
 	
 
 .PHONY		: clean fclean all re $(OBJDIR) buildrepo print
