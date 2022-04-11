@@ -6,7 +6,7 @@
 #    By: tonted <tonted@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 00:37:48 by tonted            #+#    #+#              #
-#    Updated: 2022/04/10 19:33:52 by tonted           ###   ########.fr        #
+#    Updated: 2022/04/11 08:23:33 by tblanco          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -114,3 +114,5 @@ ifeq ($(VERBOSE),TRUE)
 else
     HIDE = @
 endif
+
+#src/errors_utils.c src/free.c src/gnl.c src/here_doc.c src/init.c src/pipex.c src/utils.c
