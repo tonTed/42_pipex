@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 08:11:01 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/10 19:35:34 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/11 10:12:23 by tblanco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	set_here_doc(char *s, t_pipex *vars, int argc)
 {
 	if (!ft_strncmp(s, HERE_DOC, ft_strlen(s)))
 	{
-		if (argc < 6)
+		if (argc < 6 || !BONUS)
 			return (EXIT_FAILURE);
 		vars->here_doc = true;
 	}

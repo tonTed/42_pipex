@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:15:56 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/10 18:42:26 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/11 09:59:55 by tblanco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ void	init(t_pipex *vars, int argc, char **argv, char **envp)
 	else
 	{
 		vars->fd_array[0] = open(argv[i_file_in()], O_RDONLY);
+		if (vars->fd_array[0] == -1)
+		{
+			err_message(strerror(errno));
+			vars->fd_array[0] = 0;
+		}
 		vars->index_forks = 0;
 	}
 }

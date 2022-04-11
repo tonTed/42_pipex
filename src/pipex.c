@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/10 19:32:37 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/11 10:11:53 by tblanco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	vars;
 
-	if (argc < 5 || set_here_doc(argv[1], &vars, argc))
+	if (argc < 5 || (set_here_doc(argv[1], &vars, argc)))
 		exit_mess(ERR_ARGS_LESS);
 	init(&vars, argc, argv, envp);
-	if (vars.here_doc)
+	if (vars.here_doc && BONUS)
 		here_doc(&vars, argv[2]);
 	waitpid(fork_execute(vars, argv, argc), NULL, 0);
 	free_init(&vars);
