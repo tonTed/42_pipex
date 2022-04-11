@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 00:45:05 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/11 10:05:22 by tblanco          ###   ########.fr       */
+/*   Updated: 2022/04/11 13:25:54 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@
 # define HERE_DOC "here_doc"
 # define LEN_HERE_DOC 8
 # define DEBUG 1
-
-# define BONUS 0
 
 typedef struct s_pipex
 {

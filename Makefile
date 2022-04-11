@@ -6,7 +6,7 @@
 #    By: tonted <tonted@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 00:37:48 by tonted            #+#    #+#              #
-#    Updated: 2022/04/11 08:23:33 by tblanco          ###   ########.fr        #
+#    Updated: 2022/04/11 13:45:09 by tonted           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,12 +47,19 @@ CC = clang
 CFLAGS = -Wall -Wextra -Werror
 CFLAGS += -iquote$(INCDIR)
 
+BONUS := '-D BONUS=0'
+
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(HIDE)$(CC) $(CFLAGS) -c  $< -o $@
+	$(HIDE)$(CC) $(CFLAGS) $(BONUS) -c  $< -o $@
 
 all			: buildrepo $(NAME)
 
 $(NAME)		: $(OBJS)
+	$(HIDE)$(MAKE) -C $(LIBFTDIR)
+	$(HIDE)$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -o $(NAME)
+	@printf $(GREEN)"[$@] program created\n"$(RESET)
+
+bonus	: clean _bonus buildrepo $(OBJS)
 	$(HIDE)$(MAKE) -C $(LIBFTDIR)
 	$(HIDE)$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -o $(NAME)
 	@printf $(GREEN)"[$@] program created\n"$(RESET)
@@ -70,6 +77,9 @@ re			: fclean all
 
 buildrepo	:
 	$(HIDE)$(call make-repo)
+
+_bonus		:
+	$(HIDE)$(call bonus)
 
 print	:
 	@echo $(DIRS)
@@ -96,6 +106,10 @@ define make-repo
    	do \
 	mkdir -p $(OBJDIR)/$$dir; \
    	done
+endef
+
+define bonus
+	$(eval BONUS='-D BONUS=1')
 endef
 
 # Color

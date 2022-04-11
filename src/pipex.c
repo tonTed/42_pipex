@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/11 10:11:53 by tblanco          ###   ########.fr       */
+/*   Updated: 2022/04/11 13:26:57 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	vars;
 
-	if (argc < 5 || (set_here_doc(argv[1], &vars, argc)))
-		exit_mess(ERR_ARGS_LESS);
+	printf("BONUS - %d\n", BONUS);
+	if ((!BONUS && argc != 5) || (set_here_doc(argv[1], &vars, argc)))
+		exit_mess(ERR_ARGS);
 	init(&vars, argc, argv, envp);
 	if (vars.here_doc && BONUS)
 		here_doc(&vars, argv[2]);
