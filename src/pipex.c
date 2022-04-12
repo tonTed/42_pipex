@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/11 13:26:57 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/11 15:49:05 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	vars;
 
-	printf("BONUS - %d\n", BONUS);
 	if ((!BONUS && argc != 5) || (set_here_doc(argv[1], &vars, argc)))
 		exit_mess(ERR_ARGS);
 	init(&vars, argc, argv, envp);
