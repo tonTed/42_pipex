@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:25:11 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/11 12:40:33 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/13 09:19:56 by tblanco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # define ERR_MESS "Error.\n"
 # define ERR_PATHBIN "PATH environment variable does not exist\n"
-# define ERR_ARGS "Bad arguments ammount.\n"
+# define ERR_ARGS "Bad arguments ammount."
 
 int		err(void);
 int		err_message(char *s);
