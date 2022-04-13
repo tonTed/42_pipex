@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:15:56 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/11 09:59:55 by tblanco          ###   ########.fr       */
+/*   Updated: 2022/04/12 20:54:43 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	init(t_pipex *vars, int argc, char **argv, char **envp)
 	if (!vars->path_bin)
 		exit_mess(ERR_PATHBIN);
 	set_fd_array(vars, vars->cmds);
+	ft_puttabint_fd(vars->fd_array, vars->cmds * 2, 1);
 	if (vars->here_doc)
 	{
 		vars->fd_array[0] = STDIN_FILENO;
@@ -62,8 +63,12 @@ void	init(t_pipex *vars, int argc, char **argv, char **envp)
 		if (vars->fd_array[0] == -1)
 		{
 			err_message(strerror(errno));
-			vars->fd_array[0] = 0;
+			vars->fd_array[0] = open("/dev/null", O_RDONLY);
+			dup2(vars->fd_array[0], vars->fd_array[1]);
+			close(vars->fd_array[0]);
+			vars->index_forks = 1;
 		}
-		vars->index_forks = 0;
+		else
+			vars->index_forks = 0;
 	}
 }

@@ -7,3 +7,4 @@ pipex
 pipex.dSYM
 obj
 .DS_Store
+test.sh

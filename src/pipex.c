@@ -6,7 +6,7 @@
 /*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 22:26:20 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/11 15:49:05 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/12 21:00:06 by tonted           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ pid_t	fork_execute(t_pipex vars, char **argv, int argc)
 			exit(1);
 		}
 		else
+		{
 			close(fd_write_end(vars));
+		}
 		vars.index_forks++;
 	}
 	return (id);
