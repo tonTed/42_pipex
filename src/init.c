@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tonted <tonted@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tblanco <tblanco@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:15:56 by tonted            #+#    #+#             */
-/*   Updated: 2022/04/12 20:54:43 by tonted           ###   ########.fr       */
+/*   Updated: 2022/04/13 09:22:57 by tblanco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	init(t_pipex *vars, int argc, char **argv, char **envp)
 	if (!vars->path_bin)
 		exit_mess(ERR_PATHBIN);
 	set_fd_array(vars, vars->cmds);
-	ft_puttabint_fd(vars->fd_array, vars->cmds * 2, 1);
 	if (vars->here_doc)
 	{
 		vars->fd_array[0] = STDIN_FILENO;
